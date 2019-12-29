@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    restart: always
+    environment:
+     - VIRTUAL_HOST=ph.local
+    networks:
+     - web
+     - default
+    volumes:
+      - "./:/var/www/html/"
+
+  db:
+    container_name: password_handler_db
+    image: mysql:5.7.28
+    restart: always
+    networks:
+      - web
+      - default
+    volumes:
+      - "./dbdata:/var/lib/mysql"
+    environment:
+      MYSQL_USER: ${DB_USERNAME} 
+      MYSQL_PASSWORD: ${DB_PASSWORD} 
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    env_file:
+      - .env
+    ports:
+      - "33061:${DB_PORT}"
+        
+networks:
+  web:
+    external: true

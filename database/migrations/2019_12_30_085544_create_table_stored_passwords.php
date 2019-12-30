@@ -16,7 +16,9 @@ class CreateTableStoredPasswords extends Migration
         Schema::create('stored_passwords', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('fk_user_email', 255);
+            $table->text('password_assosiation_alias');
             $table->string('stored_password', 255);
+            $table->timestamps();
 
             $table->foreign('fk_user_email')->references('email')->on('users');
 

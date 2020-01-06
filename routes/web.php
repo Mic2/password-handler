@@ -11,6 +11,9 @@
 |
 */
 
-Route::get('/', function () {
-    return view('frontpage');
-});
+// GETS
+Route::get('/', 'PasswordController@Index');
+
+
+// POSTS
+Route::post('/store-password', 'PasswordController@StoreNewPassword');

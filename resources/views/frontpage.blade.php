@@ -3,14 +3,13 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <link rel="stylesheet" href="/css/password-wrapper.css" />
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
         <title>PASSWORD HANDLER - Powered by Laravel</title>
     </head>
     <body>
-       
-        
-        <div class="flex-center position-ref full-height">
            <!--
             @if (Route::has('login'))
                 <div class="top-right links">
@@ -27,14 +26,16 @@
             @endif
             -->
             
-            <div class="container">
+        <div class="container-fluid">
+            <div class="container-inner-wrapper">
                 <div class="title m-b-md">
                     PASSWORD HANDLER - Powered by Laravel
                 </div>
                 <!-- Add new password -->
-                <div id="password-add-wrapper" class="outer-box row" >
+                <div id="password-add-wrapper" class="outer-box" >
                     <div class="password-form-wrapper" >
-                        <form class="form-inline">
+                        <form class="form-inline ajax-form" action="/store-password">
+                            @csrf
                             <input type="text" name="password-assosiation-alias" class="form-control" placeholder="Username" />
                             <input type="password" name="password" class="form-control" placeholder="Password" />
                             <input type="submit" name="save-password" class="btn btn-primary" value="Save" />
@@ -43,8 +44,9 @@
                 </div>
 
                 <!-- Search password -->
-                <div id="password-search-wrapper" class="outer-box row" >
-                    <form class="form-inline">
+                <div id="password-search-wrapper" class="outer-box" >
+                    <form class="form-inline ajax-form">
+                        @csrf
                         <input type="text" name="search-password" class="form-control" placeholder="Search" />
                         <input type="submit" name="search-password-submit" class="btn btn-primary" value="Search" />
                     </form>
@@ -52,15 +54,17 @@
 
                 <!-- Password list -->
                 <h2>Saved passwords list</h2>
-                <div id="password-list-wrapper" class="outer-box row" >
-                    <form class="form-inline">
+                <div id="password-list-wrapper" class="outer-box" >
+                    <form class="form-inline ajax-form">
+                        @csrf
                         <input type="text" name="password-assosiation-alias" class="form-control" placeholder="Username" readonly />
                         <input type="password" name="password" class="form-control" placeholder="Password" readonly />
                         <input type="submit" name="save-password" class="btn btn-primary" value="Edit" />
                     </form>
                 </div>
             </div>
-
         </div>
     </body>
+
+    <script src="/js/ui-form-ajax-handler.js"></script>
 </html>

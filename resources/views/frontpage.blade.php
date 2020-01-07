@@ -36,8 +36,9 @@
                     <div class="password-form-wrapper" >
                         <form class="form-inline ajax-form" action="/store-password">
                             @csrf
-                            <input type="text" name="password-assosiation-alias" class="form-control" placeholder="Username" />
+                            <input type="text" name="username" class="form-control" placeholder="Username" />
                             <input type="password" name="password" class="form-control" placeholder="Password" />
+                            <input type="text" name="password-assosiation-alias" class="form-control" placeholder="App name" />
                             <input type="submit" name="save-password" class="btn btn-primary" value="Save" />
                         </form>
                     </div>
@@ -56,13 +57,23 @@
                 <!-- Password list -->
                 <h2>Saved passwords list</h2>
                 <div id="password-list-wrapper" class="outer-box" >
-                    <form class="form-inline ajax-form">
-                        @csrf
-                        <input type="text" name="password-assosiation-alias" class="form-control" placeholder="Username" readonly />
-                        <input type="password" name="password" class="form-control" placeholder="Password" readonly />
-                        <input type="submit" name="save-password" class="btn btn-primary" value="Edit" />
-                    </form>
+                    @foreach ($data as $stored_password_information) 
+                        <form class="form-inline ajax-form" action="/get-password">
+                            @csrf
+                            <input type="text" name="username" class="form-control" placeholder="Username" value="{{ $stored_password_information->username }}" readonly />
+                            <input type="password" name="password" class="form-control" placeholder="Password" value="{{ $stored_password_information->stored_password }}" readonly />
+                            <input type="text" name="password-assosiation-alias" class="form-control" placeholder="App name" value="{{ $stored_password_information->password_assosiation_alias }}" readonly />
+                            <input type="submit" name="copy-password" class="btn btn-primary" value="copy to clipboard" />
+                        </form>
+                    @endforeach
                 </div>
+            </div>
+        </div>
+        <div id="clipboard-container-overlay">
+            <div id="clipboard-container-wrapper">
+                <img src="/img/Clipboard.png" />
+                <input type="text" id="clipboard-container" value="" />
+                <p>Copyied successfully!</p>
             </div>
         </div>
     </body>

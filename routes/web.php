@@ -17,3 +17,4 @@ Route::get('/', 'PasswordController@Index');
 
 // POSTS
 Route::post('/store-password', 'PasswordController@StoreNewPassword');
+Route::post('/get-password', 'PasswordController@GetStoredPassword');

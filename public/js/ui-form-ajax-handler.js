@@ -12,20 +12,45 @@ $(document).ready(function() {
 // All forms that have this class will send information by ajax
 $('.ajax-form').submit(function(e) {
 
+  // Preventing default form behavior
   e.preventDefault();
 
+  // Getting form information
   var url = $(this).attr('action');
   var data = $(this).serialize();
 
   $.ajax({
-    method: "POST",
-    url: url,
-    data: data
+      method: "POST",
+      url: url,
+      data: data
   })
   .done(function( msg ) {
-    alert( "Data Saved: " + msg );
-  });
+      
+      if(url === "/get-password") {
 
-  $(this).find('input[type=text], input[type=password]').val("");
+        $('#clipboard-container-overlay').show();
+
+        var copyText = document.getElementById('clipboard-container');
+        
+        // Storing the text inside of our clipboard container
+        $(copyText).attr('value', msg);
+
+        copyText.style.display='block';
+        copyText.select();
+        document.execCommand("copy");
+        copyText.style.display='none';
+
+        $(copyText).attr('value', '');
+
+        $('#clipboard-container-overlay').hide();
+
+      } else {
+        $('.password-form-wrapper form').find('input[type=text], input[type=password]').val("");
+      }
+      console.log("Ajax done");
+  });
+  
+  // Clear form after submit
+  //$(this).find('input[type=text], input[type=password]').val("");
 
 });

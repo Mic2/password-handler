@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 class CreateTableStoredPasswords extends Migration
 {
@@ -17,8 +18,9 @@ class CreateTableStoredPasswords extends Migration
             $table->bigIncrements('id');
             $table->string('fk_user_email', 255);
             $table->text('password_assosiation_alias');
+            $table->text('username');
             $table->string('stored_password', 255);
-            $table->timestamps();
+            $table->dateTime('created_at');
 
             $table->foreign('fk_user_email')->references('email')->on('users');
 

@@ -42,6 +42,7 @@
                         </form>
                     </div>
                 </div>
+                <p>Leave password empty if you want us to generate a strong password for you</p>
 
                 <!-- Search password -->
                 <div id="password-search-wrapper" class="outer-box" >

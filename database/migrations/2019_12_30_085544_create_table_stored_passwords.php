@@ -22,7 +22,9 @@ class CreateTableStoredPasswords extends Migration
             $table->string('stored_password', 255);
             $table->dateTime('created_at');
 
-            $table->foreign('fk_user_email')->references('email')->on('users');
+            $table->foreign('fk_user_email')->references('email')->on('users')
+            ->onUpdate('cascade')
+            ->onDelete('cascade');
 
         });
     }

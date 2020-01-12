@@ -6,10 +6,8 @@ $(document).ready(function() {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
   });
-}); 
 
-
-// All forms that have this class will send information by ajax
+  // All forms that have this class will send information by ajax
 $('.ajax-form').submit(function(e) {
 
   // Preventing default form behavior
@@ -54,3 +52,7 @@ $('.ajax-form').submit(function(e) {
   //$(this).find('input[type=text], input[type=password]').val("");
 
 });
+
+}); 
+
+

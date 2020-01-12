@@ -6,13 +6,29 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
 
-class PasswordController extends Controller
+class HomeController extends Controller
 {
-    public function Index() {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function index()
+    {
 
         $data = $this->GetStoredPasswordsForViewList();
 
-        return View('frontpage', compact('data'));
+        return View('home', compact('data'));
     }
 
     public function GetStoredPasswordsForViewList() {

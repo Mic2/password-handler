@@ -10,11 +10,16 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::view('/', 'welcome');
 
-// GETS
-Route::get('/', 'PasswordController@Index');
-
+/*Route::get('/', function () {
+    return view('welcome');
+});*/
 
 // POSTS
-Route::post('/store-password', 'PasswordController@StoreNewPassword');
-Route::post('/get-password', 'PasswordController@GetStoredPassword');
+Route::post('/store-password', 'HomeController@StoreNewPassword');
+Route::post('/get-password', 'HomeController@GetStoredPassword');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

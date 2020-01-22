@@ -22,10 +22,14 @@ class BarcodeController extends Controller {
         $id = Auth::id();
 
         // Getting secret from the database
-        $user = DB::select('SELECT email, secret FROM users WHERE id=?', [$id]);
+        $user = DB::select('SELECT email, secret, two_factor_enabled FROM users WHERE id=?', [$id]);
 
-        // Generating the barcode image url
-        $barcode = $this->g->getURL($user[0]->email, 'password-handler', Crypt::decryptString($user[0]->secret));
+        if($user[0]->two_factor_enabled) {
+            $barcode = "";
+        } else {
+            // Generating the barcode image url
+            $barcode = $this->g->getURL($user[0]->email, 'password-handler', Crypt::decryptString($user[0]->secret));
+        }
 
         return View('barcode', compact('barcode'));
 
@@ -49,5 +53,14 @@ class BarcodeController extends Controller {
 
         return redirect()->route('home');
 
+    }
+
+    public function EnableTwoFactor() {
+
+        $id = Auth::id();
+
+        DB::table('users')
+                ->where('id', $id)
+                ->update(['two_factor_enabled' => true]);
     }
 }

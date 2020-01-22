@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -13,6 +14,9 @@ class HomeController extends Controller
      *
      * @return void
      */
+
+    private $user;
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -30,7 +34,12 @@ class HomeController extends Controller
     }
 
     public function GetStoredPasswordsForViewList() {
-        return DB::select('SELECT * FROM stored_passwords WHERE fk_user_email=?',["michael_b_hansen@live.dk"]);
+       
+        $user = Auth::user();
+        $id = Auth::id();
+        $user = DB::select('SELECT email, secret FROM users WHERE id=?', [$id]);
+
+        return DB::select('SELECT * FROM stored_passwords WHERE fk_user_email=?',[$user[0]->email]);
     }
 
     public function StoreNewPassword(Request $request) {
@@ -59,7 +68,11 @@ class HomeController extends Controller
 
     public function GetStoredPassword(Request $request) {
 
-        $data = ["michael_b_hansen@live.dk", $request->input('username'), $request->input('password-assosiation-alias'), $request->input('password')];
+        $user = Auth::user();
+        $id = Auth::id();
+        $user = DB::select('SELECT email, secret FROM users WHERE id=?', [$id]);
+
+        $data = [$user[0]->email, $request->input('username'), $request->input('password-assosiation-alias'), $request->input('password')];
         $encryptedPassword = DB::select('SELECT stored_password FROM stored_passwords WHERE fk_user_email=? AND username=? AND password_assosiation_alias=? AND stored_password=?', $data)[0]->stored_password;
         $password = Crypt::decryptString($encryptedPassword);
         return $password;

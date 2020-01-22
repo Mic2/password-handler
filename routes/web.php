@@ -20,8 +20,9 @@ Route::view('/', 'welcome');
 Route::post('/store-password', 'HomeController@StoreNewPassword');
 Route::post('/get-password', 'HomeController@GetStoredPassword');
 Route::post('/validate-two-factor', 'BarcodeController@ValidateTwoFactor');
+Route::post('/two-factor-enable', 'BarcodeController@EnableTwoFactor');
 
-Route::get('/barcode', 'BarcodeController@index');
+Route::get('/barcode', 'BarcodeController@index')->name('barcode');
 Route::get('/home', 'HomeController@index')->name('home');
 
 Auth::routes();

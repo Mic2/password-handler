@@ -55,12 +55,29 @@ class BarcodeController extends Controller {
 
     }
 
-    public function EnableTwoFactor() {
+    public function EnableTwoFactor(Request $request) {
 
-        $id = Auth::id();
+        if($request->code !== null && !empty($request->code)) {
 
-        DB::table('users')
-                ->where('id', $id)
-                ->update(['two_factor_enabled' => true]);
+            $user = Auth::user();
+            $id = Auth::id();
+
+            // Getting secret from the database
+            $user = DB::select('SELECT secret FROM users WHERE id=?', [$id]);
+
+            $validation = $this->g->checkCode(Crypt::decryptString($user[0]->secret), $request->code);
+
+            // If the user did validate :) we accept
+            if($validation) {
+                $id = Auth::id();
+
+                DB::table('users')
+                    ->where('id', $id)
+                    ->update(['two_factor_enabled' => true]);
+                    return redirect()->route('home');
+            }
+        }
+        return redirect()->route('barcode');
+        
     }
 }

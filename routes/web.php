@@ -19,7 +19,9 @@ Route::view('/', 'welcome');
 // POSTS
 Route::post('/store-password', 'HomeController@StoreNewPassword');
 Route::post('/get-password', 'HomeController@GetStoredPassword');
+Route::post('/validate-two-factor', 'BarcodeController@ValidateTwoFactor');
+
+Route::get('/barcode', 'BarcodeController@index');
+Route::get('/home', 'HomeController@index')->name('home');
 
 Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');

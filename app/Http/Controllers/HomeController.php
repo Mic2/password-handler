@@ -25,9 +25,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-
-        $data = $this->GetStoredPasswordsForViewList();
-
+        $data['passwords'] = $this->GetStoredPasswordsForViewList();
         return View('home', compact('data'));
     }
 
@@ -65,6 +63,10 @@ class HomeController extends Controller
         $encryptedPassword = DB::select('SELECT stored_password FROM stored_passwords WHERE fk_user_email=? AND username=? AND password_assosiation_alias=? AND stored_password=?', $data)[0]->stored_password;
         $password = Crypt::decryptString($encryptedPassword);
         return $password;
+
+    }
+
+    public function ValidateTwoFactor() {
 
     }
 }

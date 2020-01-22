@@ -8,6 +8,9 @@ use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Crypt;
+use Google\Authenticator\GoogleAuthenticator;
+
 
 class RegisterController extends Controller
 {
@@ -30,6 +33,7 @@ class RegisterController extends Controller
      * @var string
      */
     protected $redirectTo = RouteServiceProvider::HOME;
+    protected $g;
 
     /**
      * Create a new controller instance.
@@ -38,6 +42,8 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
+        $this->g = new GoogleAuthenticator;
+        
         $this->middleware('guest');
     }
 
@@ -68,6 +74,7 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'secret' => Crypt::encryptString($this->g->generateSecret())
         ]);
     }
 }

@@ -1,3 +1,12 @@
+@php
+
+
+// Making sure two factor is validated
+if(session('twoFactorIsValidated') !== null) {
+    $isTwoFactorValidated = session('twoFactorIsValidated');
+}
+
+@endphp
 @extends('layouts.app')
 
 @section('content')
@@ -39,17 +48,27 @@
 
                     <!-- Password list -->
                     <h2>Saved passwords list</h2>
-                    <div id="password-list-wrapper" class="outer-box" >
-                        @foreach ($data as $stored_password_information) 
-                            <form class="form-inline ajax-form" action="/get-password">
-                                @csrf
-                                <input type="text" name="username" class="form-control" placeholder="Username" value="{{ $stored_password_information->username }}" readonly />
-                                <input type="password" name="password" class="form-control" placeholder="Password" value="{{ $stored_password_information->stored_password }}" readonly />
-                                <input type="text" name="password-assosiation-alias" class="form-control" placeholder="App name" value="{{ $stored_password_information->password_assosiation_alias }}" readonly />
-                                <input type="submit" name="copy-password" class="btn btn-primary" value="copy to clipboard" />
-                            </form>
-                        @endforeach
-                    </div>
+                    @if(isset($isTwoFactorValidated) && $isTwoFactorValidated)
+                        <div id="password-list-wrapper" class="outer-box" >
+                            @foreach ($data['passwords'] as $stored_password_information)
+                                <form class="form-inline ajax-form" action="/get-password">
+                                    @csrf
+                                    <input type="text" name="username" class="form-control" placeholder="Username" value="{{ $stored_password_information->username }}" readonly />
+                                    <input type="password" name="password" class="form-control" placeholder="Password" value="{{ $stored_password_information->stored_password }}" readonly />
+                                    <input type="text" name="password-assosiation-alias" class="form-control" placeholder="App name" value="{{ $stored_password_information->password_assosiation_alias }}" readonly />
+                                    <input type="submit" name="copy-password" class="btn btn-primary" value="copy to clipboard" />
+                                </form>
+                            @endforeach
+                        </div>
+                    @else
+                        <!-- Two factor validation -->
+                        <h3>Please provide Two factor code</h3>
+                        <form id="twoFactorCodeForm" class="form-inline outer-box" method="POST" action="/validate-two-factor">
+                            @csrf
+                            <input type="text" name="code" class="form-control" />
+                            <input type="submit" name="twoFactorLoginSubmit" class="btn btn-primary" value="Validate" />
+                        </form>
+                    @endif
                 </div>
             </div>
         </div>

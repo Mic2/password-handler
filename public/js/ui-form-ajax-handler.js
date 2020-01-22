@@ -19,6 +19,7 @@ $('.ajax-form').submit(function(e) {
 
   $.ajax({
       method: "POST",
+      async: false,
       url: url,
       data: data
   })

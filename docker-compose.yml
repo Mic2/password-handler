@@ -6,7 +6,7 @@ services:
     build: .
     restart: always
     environment:
-     - VIRTUAL_HOST=ph.local
+     - VIRTUAL_HOST=${VIRTUAL_HOST}
     networks:
      - web
      - default
@@ -19,7 +19,7 @@ services:
     image: mysql:5.7.28
     restart: always
     networks:
-      - web
+      - web_password_handler
       - default
     volumes:
       - "./dbdata:/var/lib/mysql"
@@ -31,7 +31,7 @@ services:
     env_file:
       - .env
     ports:
-      - "33061:${DB_PORT}"
+      - "33062:${DB_PORT}"
         
 networks:
   web:

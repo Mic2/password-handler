@@ -9,6 +9,9 @@ ExecuteCommand("echo y | composer update");
 EchoCommandDescription("Starting Laravel database migration:");
 ExecuteCommand("php artisan migrate");
 
+EchoCommandDescription("Starting Laravel optimization:");
+ExecuteCommand("php artisan optimize");
+
 function EchoCommandDescription($echo) {
     echo "\n";
     echo $echo;

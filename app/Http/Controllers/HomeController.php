@@ -29,8 +29,31 @@ class HomeController extends Controller
      */
     public function index()
     {
+        // Default this will be false.
+        $data['isTwoFactorEnabled'] = false;
+
+        // Check if two factor is enabled in the database
+        $data['isTwoFactorEnabled'] = $this->CheckTwoFactorIsEnabled();
+
         $data['passwords'] = $this->GetStoredPasswordsForViewList();
         return View('home', compact('data'));
+    }
+
+    private function CheckTwoFactorIsEnabled() {
+        
+        $user = Auth::user();
+        $id = Auth::id();
+        $validation = DB::select('SELECT two_factor_enabled FROM users WHERE id=?', [$id]);
+
+        // Checking if enabled or not
+        switch ($validation[0]->two_factor_enabled) {
+            case 0:
+                return false;
+            break;
+            case 1:
+                return true;
+            break;
+        }
     }
 
     public function GetStoredPasswordsForViewList() {

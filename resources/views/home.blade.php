@@ -1,6 +1,5 @@
 @php
 
-
 // Making sure two factor is validated
 if(session('twoFactorIsValidated') !== null) {
     $isTwoFactorValidated = session('twoFactorIsValidated');
@@ -62,12 +61,17 @@ if(session('twoFactorIsValidated') !== null) {
                         </div>
                     @else
                         <!-- Two factor validation -->
-                        <h3>Please provide Two factor code</h3>
-                        <form id="twoFactorCodeForm" class="form-inline outer-box" method="POST" action="/validate-two-factor">
-                            @csrf
-                            <input type="text" name="code" class="form-control" />
-                            <input type="submit" name="twoFactorLoginSubmit" class="btn btn-primary" value="Validate" />
-                        </form>
+                        @if($data['isTwoFactorEnabled'])
+                            <h3>Please provide Two factor code</h3>
+                            <form id="twoFactorCodeForm" class="form-inline outer-box" method="POST" action="/validate-two-factor">
+                                @csrf
+                                <input type="text" name="code" class="form-control" />
+                                <input type="submit" name="twoFactorLoginSubmit" class="btn btn-primary" value="Validate" />
+                            </form>
+                        @else 
+                            <p>Please enable two factor authentication</p>
+                            <a href="/barcode">Enable two factor authentication here</a>
+                        @endif
                     @endif
                 </div>
             </div>

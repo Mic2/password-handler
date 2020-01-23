@@ -10,6 +10,8 @@ services:
     networks:
      - web
      - default
+    ports:
+      - 9002:80
     volumes:
       - "./:/var/www/html/"
       - "./docker-files/apache.conf:/etc/apache2/sites-available/000-default.conf"

@@ -19,7 +19,7 @@ services:
     image: mysql:5.7.28
     restart: always
     networks:
-      - web_password_handler
+      - web
       - default
     volumes:
       - "./dbdata:/var/lib/mysql"

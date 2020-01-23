@@ -14,7 +14,7 @@ class AddTwoFactorEnabledToUsers extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->boolean('two_factor_enabled');
+            $table->boolean('two_factor_enabled')->default(false);
         });
     }
 

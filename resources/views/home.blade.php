@@ -22,7 +22,8 @@ if(session('twoFactorIsValidated') !== null) {
                         </div>
                     @endif
 
-                        <!-- Add new password -->
+                    <h2>Add new login</h2>
+                    <!-- Add new password -->
                     <div id="password-add-wrapper" class="outer-box" >
                         <div class="password-form-wrapper" >
                             <!-- REMOVED ajax-form class -->
@@ -37,17 +38,17 @@ if(session('twoFactorIsValidated') !== null) {
                     </div>
                     <p>Leave password empty if you want us to generate a strong password for you</p>
 
-                    <!-- Search password -->
-                    <div id="password-search-wrapper" class="outer-box" >
+                    <!-- Search password NOT IMPLEMENTED YEAD-->
+                    <!--<div id="password-search-wrapper" class="outer-box" >
                         <form class="form-inline ajax-form">
                             @csrf
                             <input type="text" name="search-password" class="form-control" placeholder="Search" />
                             <input type="submit" name="search-password-submit" class="btn btn-primary" value="Search" />
                         </form>
-                    </div>
+                    </div>-->
 
                     <!-- Password list -->
-                    <h2>Saved passwords list</h2>
+                    <h2>Saved logins list</h2>
                     @if(isset($isTwoFactorValidated) && $isTwoFactorValidated)
                         <div id="password-list-wrapper" class="outer-box" >
                             @foreach ($data['passwords'] as $stored_password_information)

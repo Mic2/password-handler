@@ -15,8 +15,6 @@ class HomeController extends Controller
      * @return void
      */
 
-    private $user;
-
     public function __construct()
     {
         $this->middleware('auth');
@@ -36,14 +34,25 @@ class HomeController extends Controller
         $data['isTwoFactorEnabled'] = $this->CheckTwoFactorIsEnabled();
 
         $data['passwords'] = $this->GetStoredPasswordsForViewList();
+
         return View('home', compact('data'));
+    }
+    
+    private function GetUserInformation() {
+        
+        $user = new \stdClass();
+        $user->id = Auth::id();
+        $user->email = DB::select('SELECT email FROM users WHERE id=?', [$user->id])[0]->email;
+
+        // Getting information about the logged in user from the database
+        return $user;
     }
 
     private function CheckTwoFactorIsEnabled() {
-        
-        $user = Auth::user();
-        $id = Auth::id();
-        $validation = DB::select('SELECT two_factor_enabled FROM users WHERE id=?', [$id]);
+
+        $user = $this->GetUserInformation();
+
+        $validation = DB::select('SELECT two_factor_enabled FROM users WHERE id=?', [$user->id]);
 
         // Checking if enabled or not
         switch ($validation[0]->two_factor_enabled) {
@@ -58,12 +67,11 @@ class HomeController extends Controller
 
     public function GetStoredPasswordsForViewList() {
        
-        $user = Auth::user();
-        $id = Auth::id();
-        $user = DB::select('SELECT email FROM users WHERE id=?', [$id]);
+        $user = $this->GetUserInformation();
 
-        return DB::select('SELECT * FROM stored_passwords WHERE fk_user_email=?',[$user[0]->email]);
+        return DB::select('SELECT * FROM stored_passwords WHERE fk_user_email=?',[$user->email]);
     }
+
 
     private function GeneratePassword($length = 10) {
         
@@ -71,7 +79,6 @@ class HomeController extends Controller
         $password = substr($random, 0, $length);
 
         return $password;
-
     }
 
     public function StoreNewPassword(Request $request) {
@@ -83,28 +90,25 @@ class HomeController extends Controller
             $password = $request->input('password');
         }
 
-        $user = Auth::user();
-        $id = Auth::id();
-        $user = DB::select('SELECT email FROM users WHERE id=?', [$id]);
+        $user = $this->GetUserInformation();
 
         $timestamp = date('Y-m-d H:m:s');
 
         DB::table('stored_passwords')->insert([
-            'fk_user_email' => $user[0]->email,
+            'fk_user_email' => $user->email,
             'username' => $request->input('username'),
             'password_assosiation_alias' => $request->input('password-assosiation-alias'),
             'stored_password' => Crypt::encryptString($password),
             'created_at' => $timestamp
         ]);
+        return redirect()->route('home');
     }
 
     public function GetStoredPassword(Request $request) {
 
-        $user = Auth::user();
-        $id = Auth::id();
-        $user = DB::select('SELECT email, secret FROM users WHERE id=?', [$id]);
+        $user = $this->GetUserInformation();
 
-        $data = [$user[0]->email, $request->input('username'), $request->input('password-assosiation-alias'), $request->input('password')];
+        $data = [$user->email, $request->input('username'), $request->input('password-assosiation-alias'), $request->input('password')];
         $encryptedPassword = DB::select('SELECT stored_password FROM stored_passwords WHERE fk_user_email=? AND username=? AND password_assosiation_alias=? AND stored_password=?', $data)[0]->stored_password;
         $password = Crypt::decryptString($encryptedPassword);
         return $password;

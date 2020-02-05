@@ -25,7 +25,8 @@ if(session('twoFactorIsValidated') !== null) {
                         <!-- Add new password -->
                     <div id="password-add-wrapper" class="outer-box" >
                         <div class="password-form-wrapper" >
-                            <form class="form-inline ajax-form" action="/store-password">
+                            <!-- REMOVED ajax-form class -->
+                            <form class="form-inline" method="POST" action="/store-password">
                                 @csrf
                                 <input type="text" name="username" class="form-control" placeholder="Username" />
                                 <input type="password" name="password" class="form-control" placeholder="Password" autocomplete="new-password" />

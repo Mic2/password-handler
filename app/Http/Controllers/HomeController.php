@@ -60,17 +60,21 @@ class HomeController extends Controller
        
         $user = Auth::user();
         $id = Auth::id();
-        $user = DB::select('SELECT email, secret FROM users WHERE id=?', [$id]);
+        $user = DB::select('SELECT email FROM users WHERE id=?', [$id]);
 
         return DB::select('SELECT * FROM stored_passwords WHERE fk_user_email=?',[$user[0]->email]);
     }
 
     public function StoreNewPassword(Request $request) {
 
+        $user = Auth::user();
+        $id = Auth::id();
+        $user = DB::select('SELECT email FROM users WHERE id=?', [$id]);
+
         $timestamp = date('Y-m-d H:m:s');
 
         DB::table('stored_passwords')->insert([
-            'fk_user_email' => "michael_b_hansen@live.dk",
+            'fk_user_email' => $user[0]->email,
             'username' => $request->input('username'),
             'password_assosiation_alias' => $request->input('password-assosiation-alias'),
             'stored_password' => Crypt::encryptString($request->input('password')),

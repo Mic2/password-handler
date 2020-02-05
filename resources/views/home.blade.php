@@ -28,7 +28,7 @@ if(session('twoFactorIsValidated') !== null) {
                             <form class="form-inline ajax-form" action="/store-password">
                                 @csrf
                                 <input type="text" name="username" class="form-control" placeholder="Username" />
-                                <input type="password" name="password" class="form-control" placeholder="Password" />
+                                <input type="password" name="password" class="form-control" placeholder="Password" autocomplete="new-password" />
                                 <input type="text" name="password-assosiation-alias" class="form-control" placeholder="App name" />
                                 <input type="submit" name="save-password" class="btn btn-primary" value="Save" />
                             </form>

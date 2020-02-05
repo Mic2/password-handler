@@ -65,7 +65,23 @@ class HomeController extends Controller
         return DB::select('SELECT * FROM stored_passwords WHERE fk_user_email=?',[$user[0]->email]);
     }
 
+    private function GeneratePassword($length = 10) {
+        
+        $random = str_shuffle("abcdefghjklmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ234567890!$%&!$%&");
+        $password = substr($random, 0, $length);
+
+        return $password;
+
+    }
+
     public function StoreNewPassword(Request $request) {
+
+        // If the user did not enter password, we will autogenerate one
+        if(empty($request->input('password'))) {
+            $password = $this->GeneratePassword(12);
+        } else {
+            $password = $request->input('password');
+        }
 
         $user = Auth::user();
         $id = Auth::id();
@@ -77,20 +93,9 @@ class HomeController extends Controller
             'fk_user_email' => $user[0]->email,
             'username' => $request->input('username'),
             'password_assosiation_alias' => $request->input('password-assosiation-alias'),
-            'stored_password' => Crypt::encryptString($request->input('password')),
+            'stored_password' => Crypt::encryptString($password),
             'created_at' => $timestamp
         ]);
-
-        /*$encryptedPassword = DB::select('SELECT stored_password FROM stored_passwords where fk_user_email=?', ['michael_b_hansen@live.dk'])[0]->stored_password;
-        $password = Crypt::decryptString($encryptedPassword);
-
-        print_r($password);*/
-
-        // HARDCODING user email until we have user management on the site
-        //DB::insert('INSERT INTO stored_passwords (fk_user_email, password_assosiation_alias, username, stored_password) VALUES (?,?,?,?)', ["michael_b_hansen@live.dk", $request->input('username'), $request->input('password-assosiation-alias'), $request->input('password')]);      
-
-        // Getting the username and password wich we will store
-        // (MAYBE we should actually just generate a new strong password. IF ITS EMPTY!)
     }
 
     public function GetStoredPassword(Request $request) {

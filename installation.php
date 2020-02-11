@@ -9,13 +9,13 @@ ExecuteCommand("echo y | composer install");
 EchoCommandDescription("Starting Laravel database migration:");
 ExecuteCommand("php artisan migrate");
 
-EchoCommandDescription("Starting Laravel optimization:");
+EchoCommandDescription("Starting Laravel key generate:");
 ExecuteCommand("php artisan key:generate");
 
 EchoCommandDescription("Starting Laravel optimization:");
 ExecuteCommand("php artisan optimize");
 
-EchoCommandDescription("Starting Laravel optimization:");
+EchoCommandDescription("Starting Laravel route clear:");
 ExecuteCommand("php artisan route:clear");
 
 function EchoCommandDescription($echo) {

@@ -10,7 +10,13 @@ EchoCommandDescription("Starting Laravel database migration:");
 ExecuteCommand("php artisan migrate");
 
 EchoCommandDescription("Starting Laravel optimization:");
+ExecuteCommand("php artisan key:generate");
+
+EchoCommandDescription("Starting Laravel optimization:");
 ExecuteCommand("php artisan optimize");
+
+EchoCommandDescription("Starting Laravel optimization:");
+ExecuteCommand("php artisan route:clear");
 
 function EchoCommandDescription($echo) {
     echo "\n";

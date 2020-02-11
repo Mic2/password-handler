@@ -3,8 +3,8 @@
 // Installation script for laravel docker image
 echo "starting installation \n";
 
-EchoCommandDescription("Starting composer update:");
-ExecuteCommand("echo y | composer update");
+EchoCommandDescription("Starting composer install:");
+ExecuteCommand("echo y | composer install");
 
 EchoCommandDescription("Starting Laravel database migration:");
 ExecuteCommand("php artisan migrate");

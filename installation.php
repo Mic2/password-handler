@@ -38,6 +38,9 @@ while($error) {
 EchoCommandDescription("Starting Laravel key generate:");
 ExecuteCommand("php artisan key:generate");
 
+EchoCommandDescription("Starting Laravel key generate:");
+ExecuteCommand("php artisan key:generate");
+
 EchoCommandDescription("Starting Laravel optimization:");
 ExecuteCommand("php artisan optimize");
 
